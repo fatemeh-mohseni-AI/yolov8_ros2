@@ -1,2 +1,8 @@
 docs
 ./docs
+
+test/video.mp4
+./test/video.mp4
+
+./model/best.pt
+model/best.pt

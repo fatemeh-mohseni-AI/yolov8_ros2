@@ -4,36 +4,26 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-
 class VideoPublisher(Node):
     def __init__(self):
         super().__init__('video_publisher')
-        self.publisher_ = self.create_publisher(Image, '/camera/rgb/image_raw', 10)
-        self.timer = self.create_timer(0.1, self.timer_callback)
-        self.bridge = CvBridge()
-        self.video_path = '/root/ros2_ws/src/Ros2_Yolov8/test/video.mp4'
-        self.cap = cv2.VideoCapture(self.video_path)
+        self.publisher_ = self.create_publisher(Image, '/robo_camera_up/rgb/image_raw', 10)
+        self.timer = self.create_timer(1.0, self.publish_frame)
+        self.cv_bridge = CvBridge()
 
-        if not self.cap.isOpened():
-            self.get_logger().error(f"Failed to open video file: {self.video_path}")
-            rclpy.shutdown()
+    def publish_frame(self):
+        cap = cv2.VideoCapture('/root/ros2_ws/src/Ros2_Yolov8/test/video.mp4') # Change the path accordingly
+        if not cap.isOpened():
+            self.get_logger().error("Error opening video file")
+            return
 
-    def timer_callback(self):
-        ret, frame = self.cap.read()
-
-        if not ret:
-            # Restart the video from the beginning if end is reached
-            self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            ret, frame = self.cap.read()
-
+        ret, frame = cap.read()
         if ret:
-            # Resize the frame to 640x640
-            resized_frame = cv2.resize(frame, (640, 640))
-            msg = self.bridge.cv2_to_imgmsg(resized_frame, encoding='bgr8')
-            self.publisher_.publish(msg)
+            img_msg = self.cv_bridge.cv2_to_imgmsg(frame, encoding="bgr8")
+            self.publisher_.publish(img_msg)
         else:
-            self.get_logger().error('Failed to read frame from video')
-
+            cap.release()
+            cap.open('/root/ros2_ws/src/Ros2_Yolov8/test/video.mp4') # Change the path accordingly
 
 def main(args=None):
     rclpy.init(args=args)
@@ -41,7 +31,6 @@ def main(args=None):
     rclpy.spin(video_publisher)
     video_publisher.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

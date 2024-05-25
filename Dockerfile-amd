@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 vision:foxy-base
+FROM --platform=linux/amd64 fatemehmohseni/mip-vision:foxy-amd
 
 ENV wd=/root/ros2_ws
 ENV repo=/root/ros2_ws/src/Ros2_Yolov8

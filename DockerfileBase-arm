@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ros:foxy-ros-base
+FROM --platform=linux/arm64 fatemehmohseni/ubuntu20jetson:raw
 
 ENV repo=/root/ros2_ws/src/Ros2_Yolov8
 ENV wd=/root/ros2_ws
