@@ -1,6 +1,7 @@
 from typing import List, Dict
 
 import rclpy
+from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from rclpy.qos import QoSHistoryPolicy
 from rclpy.qos import QoSDurabilityPolicy
@@ -27,7 +28,7 @@ from yolov8_msgs.msg import DetectionArray
 from std_srvs.srv import SetBool
 
 
-class Yolov8Node(rclpy.node.Node):
+class Yolov8Node(Node):
 
     def __init__(self, **kwargs) -> None:
         super().__init__("yolov8_node", **kwargs)
@@ -37,25 +38,19 @@ class Yolov8Node(rclpy.node.Node):
         self.declare_parameter("device", "cuda:0")
         self.declare_parameter("threshold", 0.5)
         self.declare_parameter("enable", True)
-        self.declare_parameter("image_reliability",
-                               QoSReliabilityPolicy.BEST_EFFORT)
+        self.declare_parameter("image_reliability", QoSReliabilityPolicy.BEST_EFFORT)
 
         self.get_logger().info('Yolov8Node created')
 
-        self.model = self.get_parameter(
-            "model").get_parameter_value().string_value
+        self.model = self.get_parameter("model").get_parameter_value().string_value
 
-        self.device = self.get_parameter(
-            "device").get_parameter_value().string_value
+        self.device = self.get_parameter("device").get_parameter_value().string_value
 
-        self.threshold = self.get_parameter(
-            "threshold").get_parameter_value().double_value
+        self.threshold = self.get_parameter("threshold").get_parameter_value().double_value
 
-        self.enable = self.get_parameter(
-            "enable").get_parameter_value().bool_value
+        self.enable = self.get_parameter("enable").get_parameter_value().bool_value
 
-        self.reliability = self.get_parameter(
-            "image_reliability").get_parameter_value().integer_value
+        self.reliability = self.get_parameter("image_reliability").get_parameter_value().integer_value
 
         self.image_qos_profile = QoSProfile(
             reliability=self.reliability,
@@ -64,15 +59,12 @@ class Yolov8Node(rclpy.node.Node):
             depth=1
         )
 
-        self._pub = self.create_publisher(
-            DetectionArray, "detections", 10)
-        self._srv = self.create_service(
-            SetBool, "enable", self.enable_cb
-        )
+        self._pub = self.create_publisher(DetectionArray, "detections", 10)
+        self._srv = self.create_service(SetBool, "enable", self.enable_cb)
         self.cv_bridge = CvBridge()
 
         self.yolo = YOLO(self.model)
-        self.yolo.fuse()
+        # self.yolo.fuse()
 
         # subs
         self._sub = self.create_subscription(
@@ -85,6 +77,7 @@ class Yolov8Node(rclpy.node.Node):
     def enable_cb(self, request, response):
         self.enable = request.data
         response.success = True
+        response.message = "Yolov8Node " + ("enabled" if self.enable else "disabled")
         return response
 
     def parse_hypothesis(self, results: Results) -> List[Dict]:
@@ -138,8 +131,7 @@ class Yolov8Node(rclpy.node.Node):
 
             msg = Mask()
 
-            msg.data = [create_point2d(float(ele[0]), float(ele[1]))
-                        for ele in mask.xy[0].tolist()]
+            msg.data = [create_point2d(float(ele[0]), float(ele[1])) for ele in mask.xy[0].tolist()]
             msg.height = results.orig_img.shape[0]
             msg.width = results.orig_img.shape[1]
 
