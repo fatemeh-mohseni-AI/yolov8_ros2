@@ -35,3 +35,4 @@ RUN rosdep update && \
 
 # Source ROS 2 environment
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+RUN echo "source /root/ros2_ws/install/setup.bash" >> /root/.bashrc
