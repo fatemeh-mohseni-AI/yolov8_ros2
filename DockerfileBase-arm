@@ -7,15 +7,22 @@ ENV ROS_DISTRO=foxy
 RUN mkdir -p $repo
 WORKDIR $wd
 
-COPY . $repo
+COPY ./requirements.txt $repo
 
-RUN apt-get update &&  \
+# Add ROS 2 package repositories
+RUN apt-get update && apt-get install -y software-properties-common nano && \
+    add-apt-repository universe && \
+    apt-add-repository restricted && \
+    apt-add-repository multiverse && \
+    apt-get update && \
     apt-get install -y --no-install-recommends  \
-      ros-foxy-ament-cmake \
       python3-pip \
       python3-rosdep \
-      ros-foxy-rclpy \
-      ros-foxy-sensor-msgs \
+      python-is-python3 \
+      ros-$ROS_DISTRO-ament-cmake \
+      ros-$ROS_DISTRO-rclpy \
+      ros-$ROS_DISTRO-sensor-msgs \
+      ros-$ROS_DISTRO-cv-bridge \
       ffmpeg libsm6 libxext6 && \
     rm -rf /var/lib/apt/lists/*
 
@@ -23,14 +30,10 @@ RUN cd $repo && \
     pip3 install --no-cache-dir -r requirements.txt && \
     pip3 install --no-cache-dir -U rosdep colcon-common-extensions
 
-RUN rosdep update && \
+RUN rosdep init && \
+    rosdep update && \
     rosdep install --from-paths src --ignore-src -r -y
 
-RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && colcon build"
-
-# Make the entrypoint script executable
-RUN chmod +x $repo/docker/entrypoint.sh
-
-# Set the entrypoint to the script
-ENTRYPOINT ["/root/ros2_ws/src/Ros2_Yolov8/docker/entrypoint.sh"]
-#CMD ["ros2", "launch", "yolov8_bringup", "yolov8.launch.py", "model:=yolov8m-seg.pt"]
+# Source ROS 2 environment
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+RUN echo "source /root/ros2_ws/install/setup.bash" >> /root/.bashrc
