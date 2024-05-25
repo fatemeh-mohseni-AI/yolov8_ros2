@@ -10,7 +10,7 @@ WORKDIR $wd
 COPY . $repo
 
 # Add ROS 2 package repositories
-RUN apt-get update && apt-get install -y software-properties-common && \
+RUN apt-get update && apt-get install -y software-properties-common nano && \
     add-apt-repository universe && \
     apt-add-repository restricted && \
     apt-add-repository multiverse && \

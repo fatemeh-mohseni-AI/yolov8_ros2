@@ -27,7 +27,9 @@ class VideoPublisher(Node):
             ret, frame = self.cap.read()
 
         if ret:
-            msg = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+            # Resize the frame to 640x640
+            resized_frame = cv2.resize(frame, (640, 640))
+            msg = self.bridge.cv2_to_imgmsg(resized_frame, encoding='bgr8')
             self.publisher_.publish(msg)
         else:
             self.get_logger().error('Failed to read frame from video')
