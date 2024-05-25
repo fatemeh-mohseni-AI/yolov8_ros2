@@ -1,40 +1,11 @@
-FROM --platform=linux/amd64 ros:foxy-ros-base
+FROM --platform=linux/amd64 vision:foxy-base
 
-ENV repo=/root/ros2_ws/src/Ros2_Yolov8
 ENV wd=/root/ros2_ws
-ENV ROS_DISTRO=foxy
+ENV repo=/root/ros2_ws/src/Ros2_Yolov8
 
-RUN mkdir -p $repo
 WORKDIR $wd
 
 COPY . $repo
-
-# Add ROS 2 package repositories
-RUN apt-get update && apt-get install -y software-properties-common nano && \
-    add-apt-repository universe && \
-    apt-add-repository restricted && \
-    apt-add-repository multiverse && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends  \
-      python3-pip \
-      python3-rosdep \
-      python-is-python3 \
-      ros-$ROS_DISTRO-ament-cmake \
-      ros-$ROS_DISTRO-rclpy \
-      ros-$ROS_DISTRO-sensor-msgs \
-      ros-$ROS_DISTRO-cv-bridge \
-      ffmpeg libsm6 libxext6 && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN cd $repo && \
-    pip3 install --no-cache-dir -r requirements.txt && \
-    pip3 install --no-cache-dir -U rosdep colcon-common-extensions
-
-RUN rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y
-
-# Source ROS 2 environment
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 
 RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && colcon build"
 
