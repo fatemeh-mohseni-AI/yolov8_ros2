@@ -1,5 +1,5 @@
 opencv-python==4.8.1.78
 typing-extensions>=4.4.0
-ultralytics==8.1.29 / 8.2.21
+ultralytics==8.2.21
 lap==0.4.0
 cv_bridge
