@@ -33,7 +33,7 @@ RUN apt-get update && \
       libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev\
       python3.8-dev python-dev python-numpy python3-numpy\
       libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev\
-      libv4l-dev v4l-utils qv4l2 v4l2ucp\
+      libv4l-dev v4l-utils qv4l2 \
       curl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
