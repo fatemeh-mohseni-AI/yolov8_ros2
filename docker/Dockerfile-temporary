@@ -4,8 +4,7 @@
 #  although all timongentzsch images have opencv==4.5.2 .
 #  here we build opencv==4.6.0 and ros-foxy manually
 # due to filttering and sanctions I couldn't build the original Dockerfile in here :) .
-# so i just install opencv with pip ; hencd , it's not
-# cuda compatible . but doesn't matter for now
+# so i just install ros foxy on ubuntu 20 and prepare it for opencv to be installed later in other Dockerfile
 #
 # ----------------------------------------------------------------------------------------------------------------------
 
