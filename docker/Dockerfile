@@ -3,6 +3,8 @@
 #  this project uses ultralytics and ultralytics needs opencv>=4.6.0
 #  although all timongentzsch images have opencv==4.5.2 .
 #  here we build opencv==4.6.0 and ros-foxy manually
+# due to filttering and sanctions I couldn't build this file :) so i just install opencv with pip ; hencd , it's not
+#                                cuda compatible . but doesn't matter for now
 #
 # ----------------------------------------------------------------------------------------------------------------------
 
