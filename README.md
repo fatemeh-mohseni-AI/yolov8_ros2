@@ -152,3 +152,17 @@ $ ros2 launch yolov8_bringup yolov8_3d.launch.py model:=yolov8m-pose.pt
 ```
 
 [![](https://drive.google.com/thumbnail?authuser=0&sz=w1280&id=1j4VjCAsOCx_mtM2KFPOLkpJogM0t227r)](https://drive.google.com/file/d/1j4VjCAsOCx_mtM2KFPOLkpJogM0t227r/view?usp=sharing)
+
+
+---
+# Explanation on Docker files 
+
+**Docker/Dockerfile** : this file tries to build opencv>=4.6.0 , as the ultralytics library depends on opencv>=4.6 . Due to sanctions and url bandings, 
+I couldn't complete the build process so I just created another file, named : 
+**Docker/Dockerfile-temporary** and replaced the opencv build process with just a simple pip installation method .
+
+**DockerfileBase- arm/amd** those files are installing requirements.txt to decrease build time, specially because Internet low speed in Iran
+
+**Dockerfile- arm/amd** easy . Just copy source code and run the container
+
+---
