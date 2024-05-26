@@ -61,7 +61,7 @@ RUN apt-get update && \
 # --------------------------------------------------------------------------------------------
 # install opencv==4.6.0
 # --------------------------------------------------------------------------------------------
-RUN pip3 install --no-cache-dir opencv-python==4.6.0.66
+RUN python3 -m pip install --no-cache-dir opencv-python==4.6.0.66
 
 
 CMD ["bash"]
