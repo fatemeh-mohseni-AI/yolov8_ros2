@@ -29,13 +29,11 @@ ENV PYTHONIOENCODING=utf-8
 # install ros-foxy
 # --------------------------------------------------------------------------------------------
 
-# change the locale from POSIX to UTF-8
-RUN locale-gen en_US en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-
 # add the ROS deb repo to the apt sources list
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        locale \
 		curl \
 		wget \
 		gnupg2 \
@@ -43,6 +41,9 @@ RUN apt-get update && \
 		ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
+
+# change the locale from POSIX to UTF-8
+RUN locale-gen en_US en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
