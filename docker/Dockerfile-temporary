@@ -33,7 +33,7 @@ ENV PYTHONIOENCODING=utf-8
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        locale \
+        local \
 		curl \
 		wget \
 		gnupg2 \
