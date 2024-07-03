@@ -40,7 +40,8 @@ def generate_launch_description():
     device = LaunchConfiguration("device")
     device_cmd = DeclareLaunchArgument(
         "device",
-        default_value="cuda:0",
+        # default_value="cuda:0",
+        default_value="cpu",
         description="Device to use (GPU/CPU)")
 
     enable = LaunchConfiguration("enable")
@@ -58,7 +59,7 @@ def generate_launch_description():
     input_image_topic = LaunchConfiguration("input_image_topic")
     input_image_topic_cmd = DeclareLaunchArgument(
         "input_image_topic",
-        default_value="/camera/rgb/image_raw",
+        default_value="/robo_camera_down/rgb/image_raw",
         description="Name of the input image topic")
 
     image_reliability = LaunchConfiguration("image_reliability")
@@ -119,7 +120,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(model_cmd)
-    ld.add_action(tracker_cmd)
+    # ld.add_action(tracker_cmd)
     ld.add_action(device_cmd)
     ld.add_action(enable_cmd)
     ld.add_action(threshold_cmd)
@@ -128,7 +129,7 @@ def generate_launch_description():
     ld.add_action(namespace_cmd)
 
     ld.add_action(detector_node_cmd)
-    ld.add_action(tracking_node_cmd)
+    # ld.add_action(tracking_node_cmd)
     ld.add_action(debug_node_cmd)
 
     return ld

@@ -33,10 +33,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       ffmpeg libsm6 libxext6 && \
     rm -rf /var/lib/apt/lists/*
 
-RUN --mount=type=cache,target=/root/.cache/pip && \
+RUN --mount=type=cache,target=/home/fatemeh/.cache/pip \
     cd $repo && \
     pip3 install --no-cache-dir -r requirements.txt && \
-    pip3 install --no-cache-dir -U rosdep colcon-common-extensions
+    pip3 install --no-cache-dir -U rosdep colcon-common-extensions && \
+    pip3 install --no-cache-dir tornado simplejpeg
 
 RUN rosdep update && \
     rosdep install --from-paths src --ignore-src -r -y
@@ -44,4 +45,3 @@ RUN rosdep update && \
 # Source ROS 2 environment
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 RUN echo "source ${wd}/install/setup.bash" >> /root/.bashrc
-

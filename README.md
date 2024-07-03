@@ -42,7 +42,7 @@ $ ros2 launch yolov8_bringup yolov9.launch.py
 - **device**: GPU/CUDA (default: cuda:0)
 - **enable**: Wether to start YOLOv8 enabled (default: True)
 - **threshold**: Detection threshold (default: 0.5)
-- **input_image_topic**: Camera topic of RGB images (default: /camera/rgb/image_raw)
+- **input_image_topic**: Camera topic of RGB images (default: /robo_camera_down/rgb/image_raw)
 - **image_reliability**: Reliability for the image topic: 0=system default, 1=Reliable, 2=Best Effort (default: 2)
 
 ### YOLOv8 3D
@@ -69,9 +69,9 @@ $ ros2 launch yolov8_bringup yolov8_3d.launch.py
 - **device**: GPU/CUDA (default: cuda:0)
 - **enable**: wether to start YOLOv8 enabled (default: True)
 - **threshold**: detection threshold (default: 0.5)
-- **input_image_topic**: camera topic of RGB images (default: /camera/rgb/image_raw)
+- **input_image_topic**: camera topic of RGB images (default: /robo_camera_down/rgb/image_raw)
 - **image_reliability**: reliability for the image topic: 0=system default, 1=Reliable, 2=Best Effort (default: 2)
-- **input_depth_topic**: camera topic of depth images (default: /camera/depth/image_raw)
+- **input_depth_topic**: camera topic of depth images (default: /robo_camera_down/rgb/image_raw)
 - **depth_image_reliability**: reliability for the depth image topic: 0=system default, 1=Reliable, 2=Best Effort (default: 2)
 - **input_depth_info_topic**: camera topic for info data (default: /camera/depth/camera_info)
 - **depth_info_reliability**: reliability for the depth info topic: 0=system default, 1=Reliable, 2=Best Effort (default: 2)

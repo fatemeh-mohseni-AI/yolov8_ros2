@@ -7,7 +7,7 @@ import cv2
 class VideoPublisher(Node):
     def __init__(self):
         super().__init__('video_publisher')
-        self.publisher_ = self.create_publisher(Image, '/robo_camera_up/rgb/image_raw', 10)
+        self.publisher_ = self.create_publisher(Image, '/robo_camera_down/rgb/image_raw', 10)
         self.timer = self.create_timer(1.0, self.publish_frame)
         self.cv_bridge = CvBridge()
 
