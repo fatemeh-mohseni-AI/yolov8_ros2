@@ -31,6 +31,12 @@ def generate_launch_description():
         default_value="yolov8m.pt",
         description="Model name or path")
 
+    tracker = LaunchConfiguration("tracker")
+    tracker_cmd = DeclareLaunchArgument(
+        "tracker",
+        default_value="bytetrack.yaml",
+        description="Tracker name or path")
+
     device = LaunchConfiguration("device")
     device_cmd = DeclareLaunchArgument(
         "device",
@@ -52,7 +58,7 @@ def generate_launch_description():
     input_image_topic = LaunchConfiguration("input_image_topic")
     input_image_topic_cmd = DeclareLaunchArgument(
         "input_image_topic",
-        default_value="/robo_camera_up/rgb/image_raw",
+        default_value="/camera/rgb/image_raw",
         description="Name of the input image topic")
 
     image_reliability = LaunchConfiguration("image_reliability")
@@ -86,9 +92,34 @@ def generate_launch_description():
         remappings=[("image_raw", input_image_topic)]
     )
 
+    tracking_node_cmd = Node(
+        package="yolov8_ros",
+        executable="tracking_node",
+        name="tracking_node",
+        namespace=namespace,
+        parameters=[{
+            "tracker": tracker,
+            "image_reliability": image_reliability
+        }],
+        remappings=[("image_raw", input_image_topic)]
+    )
+
+    debug_node_cmd = Node(
+        package="yolov8_ros",
+        executable="debug_node",
+        name="debug_node",
+        namespace=namespace,
+        parameters=[{"image_reliability": image_reliability}],
+        remappings=[
+            ("image_raw", input_image_topic),
+            ("detections", "tracking")
+        ]
+    )
+
     ld = LaunchDescription()
 
     ld.add_action(model_cmd)
+    ld.add_action(tracker_cmd)
     ld.add_action(device_cmd)
     ld.add_action(enable_cmd)
     ld.add_action(threshold_cmd)
@@ -97,5 +128,7 @@ def generate_launch_description():
     ld.add_action(namespace_cmd)
 
     ld.add_action(detector_node_cmd)
+    ld.add_action(tracking_node_cmd)
+    ld.add_action(debug_node_cmd)
 
     return ld

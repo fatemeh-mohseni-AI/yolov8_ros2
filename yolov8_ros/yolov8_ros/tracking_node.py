@@ -14,10 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import numpy as np
-
 import rclpy
-from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from rclpy.qos import QoSHistoryPolicy
 from rclpy.qos import QoSDurabilityPolicy
@@ -26,14 +23,15 @@ from rclpy.lifecycle import LifecycleNode
 from rclpy.lifecycle import TransitionCallbackReturn
 from rclpy.lifecycle import LifecycleState
 
+import numpy as np
 import message_filters
 from cv_bridge import CvBridge
 
-from ultralytics.trackers import BOTSORT, BYTETracker
+from ultralytics.engine.results import Boxes
 from ultralytics.trackers.basetrack import BaseTrack
+from ultralytics.trackers import BOTSORT, BYTETracker
 from ultralytics.utils import IterableSimpleNamespace, yaml_load
 from ultralytics.utils.checks import check_requirements, check_yaml
-from ultralytics.engine.results import Boxes
 
 from sensor_msgs.msg import Image
 from yolov8_msgs.msg import Detection
@@ -53,7 +51,7 @@ class TrackingNode(LifecycleNode):
         self.cv_bridge = CvBridge()
 
     def on_configure(self, state: LifecycleState) -> TransitionCallbackReturn:
-        self.get_logger().info(f'Configuring {self.get_name()}')
+        self.get_logger().info(f"Configuring {self.get_name()}")
 
         tracker_name = self.get_parameter(
             "tracker").get_parameter_value().string_value
@@ -67,7 +65,7 @@ class TrackingNode(LifecycleNode):
         return TransitionCallbackReturn.SUCCESS
 
     def on_activate(self, state: LifecycleState) -> TransitionCallbackReturn:
-        self.get_logger().info(f'Activating {self.get_name()}')
+        self.get_logger().info(f"Activating {self.get_name()}")
 
         image_qos_profile = QoSProfile(
             reliability=self.image_reliability,
@@ -89,7 +87,7 @@ class TrackingNode(LifecycleNode):
         return TransitionCallbackReturn.SUCCESS
 
     def on_deactivate(self, state: LifecycleState) -> TransitionCallbackReturn:
-        self.get_logger().info(f'Deactivating {self.get_name()}')
+        self.get_logger().info(f"Deactivating {self.get_name()}")
 
         self.destroy_subscription(self.image_sub.sub)
         self.destroy_subscription(self.detections_sub.sub)
@@ -100,7 +98,7 @@ class TrackingNode(LifecycleNode):
         return TransitionCallbackReturn.SUCCESS
 
     def on_cleanup(self, state: LifecycleState) -> TransitionCallbackReturn:
-        self.get_logger().info(f'Cleaning up {self.get_name()}')
+        self.get_logger().info(f"Cleaning up {self.get_name()}")
 
         del self.tracker
 
